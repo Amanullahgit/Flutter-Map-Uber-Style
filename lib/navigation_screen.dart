@@ -26,7 +26,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Location location = Location();
   Marker? sourcePosition, destinationPosition;
   loc.LocationData? _currentPosition;
-  LatLng curLocation = LatLng(23.0525, 72.5667);
+  LatLng curLocation =  LatLng(40.7128, -74.0060);
   StreamSubscription<loc.LocationData>? locationSubscription;
 
   @override
@@ -104,27 +104,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
   getNavigation() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+   
     final GoogleMapController? controller = await _controller.future;
     location.changeSettings(accuracy: loc.LocationAccuracy.high);
-    _serviceEnabled = await location.serviceEnabled();
-
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
-      }
-    }
-
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-    if (_permissionGranted == loc.PermissionStatus.granted) {
+   
       _currentPosition = await location.getLocation();
       curLocation =
           LatLng(_currentPosition!.latitude!, _currentPosition!.longitude!);
@@ -159,7 +142,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           getDirections(LatLng(widget.lat, widget.lng));
         }
       });
-    }
+    
   }
 
   getDirections(LatLng dst) async {
